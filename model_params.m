@@ -9,7 +9,7 @@ theta_0=0; %angolo iniziale di postura (statico)
 epsilon_0=5;% ampiezza deadzone
 lambda = -2; %guadagno 
 lambda_feedforward = 0; %guadagno feedforward
-dt= 0.01;
+dt= 0.005;
 soglia_nonlin = 0.5;
 beta = 0.5; 
 %% matrici di rotazione IMU - TERNA DH
@@ -34,11 +34,11 @@ q_init = [1 0 0 0]';
 
 % filtro EKF
 
-gravity = 9.81007;
+gravity = -9.81007;
 %noise_gyro = 2.4e-3;        % Gyroscope noise(discrete), rad/s a caso
-noise_gyro = 0.1 * degtoradianti ; %gyro noise from datasheet
+noise_gyro = 0.5* degtoradianti ; %gyro noise from datasheet
 %noise_acc = 2.83e-2 ;      % Accelerometer noise, m/s^2 a caso
-noise_acc = 0.008 * gravity;
+noise_acc = 0.08 * gravity;
 %gyro_bias = 0.01 ; %rad/s per ora valori a caso poi li misuro bene
 %noise_acc = 2 ; %m/s^2 idem
 bias_acc = [0.1 , 0.1 , 0.1];
@@ -54,11 +54,17 @@ Jre = [0 0 0 1 0 0]';
 Jhe = [0 0 0 ; 0 0 l1 ; 0 -l1 0; 1 0 0; 0 1 0; 0 0 1];
 Jrc = [0 0 0 0 0 0]';
 Jhc = [0 0 0; 0 0 0; 0 0 0; 1 0 0; 0 1 0 ; 0 0 1];
-kc = 1;
+kc = 50;
 lambda_legrand = 1;
 
 %% 
-t1 = 150;
-t2 = 300;
+t1 = 300;
+t2 = 500;
+%% Nuova legge di controllo 
+P_0 = eye(12); %rivedere
+%Lambda_tot = eye(12);
+Q_cov= .001*eye(12);
+R_cov = 10*eye(6);
+R_cov_inv = inv(R_cov);
 
 
