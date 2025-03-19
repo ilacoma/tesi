@@ -1,9 +1,9 @@
 clear 
 close all
-%% parametri necessari per la simulazione 
+%% Parametri necessari per la simulazione 
 
 alpha = 0.9; % coefficiente del complementary filter
-radiantitodeg= 180/pi; % coefficiente di conversione da radianti a gradi
+radiantitodeg= 180/pi; % coefficiente di conversione da radianti a gradi 
 degtoradianti = pi/180;
 theta_0=0; %angolo iniziale di postura (statico)
 epsilon_0=5;% ampiezza deadzone
@@ -14,13 +14,13 @@ soglia_nonlin = 0.5;
 beta = 0.5; 
 %% matrici di rotazione IMU - TERNA DH
 
-R_x_90 = [1 0 0 ; 0 cosd(90) sind(90) ; 0 -sind(90) cosd(90)];
+%R_x_90 = [1 0 0 ; 0 cosd(90) sind(90) ; 0 -sind(90) cosd(90)];
 
-R_z_90 = [cosd(90) sind(90) 0 ; -sind(90) cosd(90) 0 ; 0 0 1];
+%R_z_90 = [cosd(90) sind(90) 0 ; -sind(90) cosd(90) 0 ; 0 0 1];
 
-R_imu = R_z_90 * R_x_90;
+%R_imu = R_z_90 * R_x_90;
 
-% Inizializzazione R_est come matrice di identità 3x3
+%% Inizializzazione R_est come matrice di identità 3x3
 R0 = eye(3);
 R_tilde = angle2dcm(0,0,0, 'ZYX');
 R_est = R0*(R_tilde');
@@ -43,7 +43,7 @@ noise_acc = 0.08 * gravity;
 %noise_acc = 2 ; %m/s^2 idem
 bias_acc = [0.1 , 0.1 , 0.1];
 bias_mag = 0.1;
-gyro_bias_deg = [2.8823, 0.11539 , -2.30181];
+gyro_bias_deg = [2.74, 0.1 , -1.85];
 gyro_bias = gyro_bias_deg*degtoradianti;
 P_init = 1e-10 * eye(4);
 
@@ -57,13 +57,11 @@ Jhc = [0 0 0; 0 0 0; 0 0 0; 1 0 0; 0 1 0 ; 0 0 1];
 kc = 50;
 lambda_legrand = 1;
 
-%% 
-t1 = 300;
-t2 = 500;
 %% Nuova legge di controllo 
-P_0 = eye(12); %rivedere
+%P_0 = eye(12); no
+
 %Lambda_tot = eye(12);
-Q_cov= .001*eye(12);
+Q_cov= .001*eye(12); 
 R_cov = 10*eye(6);
 R_cov_inv = inv(R_cov);
 
